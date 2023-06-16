@@ -9,7 +9,7 @@ openai.api_key = os.environ.get('OPENAI_API')
 
 # Setting up Tkinter window
 window = Tk()
-window.geometry("950x650")
+window.geometry("950x850")
 window.title("openTkv1.0")
 
 # Setting variable for OPENAI role
@@ -46,22 +46,28 @@ def chat():
     txt_gpt.pack()
     print(chat_response)
 
-
 # sets up textboxes for chat and input
 lbl_gpt = Label(window, text="Chat says...").pack()
-txt_gpt = Text(window, height = 20, width = 125, wrap=WORD)
-txt_gpt.pack()
+txt_gpt = Text(window, wrap=WORD)
+txt_gpt.pack(padx=10, pady=10, expand=True, fill='both')
 
 lbl_prompt = Label(window, text="Prompt: ").pack()
-txt_prompt = Text(window, height = 8, width = 125)
-txt_prompt.pack()
+txt_prompt = Text(window, height = 8, wrap=WORD)
+txt_prompt.pack(fill='x', padx=10, pady=10)
 
 # sets up chat and close button
-btn_chat = Button(window, text="Send", command=lambda: update_win(""))
-btn_chat.pack()
+# btn_chat = Button(window, text="Send", command=lambda: update_win(""))
+# btn_chat.pack()
+# 
+# btn_close = Button(window, text="Close", command=window.destroy)
+# btn_close.pack()
 
+# sets up chat and close button
 btn_close = Button(window, text="Close", command=window.destroy)
-btn_close.pack()
+btn_close.pack(side=RIGHT, padx=5, pady=5)
+
+btn_chat = Button(window, text="Send", command=lambda: update_win(""))
+btn_chat.pack(side=RIGHT, padx=5, pady=5)
 
 # handles shift + enter input to press chat button
 window.bind("<Shift-Return>", lambda event: update_win(""))
