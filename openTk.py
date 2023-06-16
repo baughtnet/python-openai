@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import messagebox
 
 # Getting API key from environment variable
-openai.api_key = os.environ.get('OPENAI_API')
+openai.api_key = "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" 
 
 # Setting up Tkinter window
 window = Tk()

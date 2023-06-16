@@ -1,32 +1,4 @@
-# import libraries
 import customtkinter
-import openai
-
-# openai.api_key = os.environ.get('OPENAI_API')
-openai.api_key = "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" 
-
-messages = [
-    {"role": "user", "content": "You are a polite and helpful assistant"}
-]
-
-def update_win(event):
-    global content
-    content = txt_prompt.get(1.0, "end-1c")
-    txt_gpt.insert("end", "You say:  " + content + "\n" + "---------------------------------------------------------------" + "\n")
-    txt_prompt.delete(1.0, 'end')
-    chat()
-
-def chat():
-    messages.append({"role": "user", "content": content})
-    completion = openai.ChatCompletion.create(
-        model = "gpt-3.5-turbo-16k",
-        messages = messages
-    )
-    chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
-    txt_gpt.insert("end", chat_response)
-    txt_gpt.see(END)
-    txt_gpt.pack()
-    print(chat_response)
 
 # Set up app appearance
 customtkinter.set_appearance_mode("Dark")
@@ -90,7 +62,7 @@ btn_chat.grid(row=1, column=0, padx=5, pady=5, sticky='se')
 
 # Create the close button
 btn_close = customtkinter.CTkButton(app, text="Close", command=app.destroy)
-btn_close.place(relx=1, rely=1, anchor='se', padx=5, pady=5)
+btn_close.pack(side='right', padx=5, pady=5)
 
 # Calculate the 80/20 split for the textboxes
 total_height = app.winfo_screenheight()
@@ -100,8 +72,6 @@ txt_prompt_height = int(total_height * 0.2)
 # Set the height of the textboxes
 txt_gpt.configure(height=txt_gpt_height)
 txt_prompt.configure(height=txt_prompt_height)
-
-app.bind("<Shift-Return>", lambda event: update_win(""))
 
 # Run the app
 app.mainloop()

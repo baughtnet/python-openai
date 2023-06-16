@@ -27,31 +27,16 @@ main_frame.pack(fill='both', expand=True, padx=5, pady=5)
 
 # Configure rows and columns of the main frame
 main_frame.columnconfigure(0, weight=1)
-main_frame.columnconfigure(1, weight=3)
-main_frame.rowconfigure(0, weight=2)
-main_frame.rowconfigure(1, weight=1)
-
-# Create a frame for the textboxes
-text_frame = customtkinter.CTkFrame(master=main_frame)
-text_frame.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky='nsew')
-text_frame.columnconfigure(0, weight=1)
-text_frame.columnconfigure(1, weight=0)
-text_frame.max_width = 200
-text_frame.rowconfigure(0, weight=8)
-text_frame.rowconfigure(1, weight=1)
-
-# Configure rows and columns of the main frame
-main_frame.columnconfigure(0, weight=1)
-main_frame.columnconfigure(1, weight=3)
-main_frame.rowconfigure(0, weight=2)
-main_frame.rowconfigure(1, weight=1)
+main_frame.columnconfigure(1, weight=4)
+main_frame.rowconfigure(0, weight=8)
+main_frame.rowconfigure(1, weight=2)
 
 # Create a frame for the textboxes
 text_frame = customtkinter.CTkFrame(master=main_frame)
 text_frame.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky='nsew')
 text_frame.columnconfigure(0, weight=1)
 text_frame.rowconfigure(0, weight=8)
-text_frame.rowconfigure(1, weight=1)
+text_frame.rowconfigure(1, weight=2)  # Updated row weight for txt_prompt
 
 # Large textbox for txt_gpt
 txt_gpt = customtkinter.CTkTextbox(master=text_frame, wrap='word')
@@ -65,9 +50,13 @@ lbl_prompt.grid(row=1, column=0, padx=5, pady=(5,2), sticky='w')
 txt_prompt = customtkinter.CTkTextbox(master=text_frame, wrap='word')
 txt_prompt.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 
+# "Chat says..." label
+lbl_gpt = customtkinter.CTkLabel(master=main_frame, text="Chat says...", height=1)
+lbl_gpt.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+
 # Send button
-btn_chat = customtkinter.CTkButton(text_frame, text="Send", command=lambda: update_win(""))
-btn_chat.grid(row=1, column=0, padx=5, pady=5, sticky='se')
+btn_chat = customtkinter.CTkButton(main_frame, text="Send", command=lambda: update_win(""))
+btn_chat.grid(row=1, column=1, padx=5, pady=5, sticky='se')
 
 btn_close = customtkinter.CTkButton(app, text="Close", command=app.destroy)
 btn_close.pack(side='right', padx=5, pady=5)
