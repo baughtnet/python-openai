@@ -1,9 +1,11 @@
 # import libraries
 import customtkinter
 import openai
+import os
 
 # openai.api_key = os.environ.get('OPENAI_API')
-openai.api_key = "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" 
+# openai.api_key = "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" 
+openai.api_key = os.environ.get('OPENAI_API')
 
 messages = [
     {"role": "user", "content": "You are a polite and helpful assistant"}
@@ -24,8 +26,8 @@ def chat():
     )
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
     txt_gpt.insert("end", chat_response)
-    txt_gpt.see(END)
-    txt_gpt.pack()
+    txt_gpt.see('end')
+    # txt_gpt.pack()
     print(chat_response)
 
 # Set up app appearance
@@ -50,6 +52,9 @@ tab_view.add("Normal")
 tab_view.add("Code")
 tab_view.add("Document")
 
+btn_frame = customtkinter.CTkFrame(app)
+btn_frame.place(relx=1, rely=1, anchor='se', relwidth=1.0, relheight=0.05)
+
 # Create a main frame for the Normal tab
 main_frame = customtkinter.CTkFrame(tab_view.tab("Normal"))
 main_frame.pack(fill='both', expand=True, padx=5, pady=5)
@@ -60,13 +65,12 @@ main_frame.columnconfigure(1, weight=6)
 main_frame.rowconfigure(0, weight=4)
 main_frame.rowconfigure(1, weight=1)
 
-
-# Create a frame for the textboxes
-text_frame = customtkinter.CTkFrame(master=main_frame)
-text_frame.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky='nsew')
-text_frame.columnconfigure(0, weight=1)
-text_frame.rowconfigure(0, weight=8)
-text_frame.rowconfigure(1, weight=2)
+# Configure rows and columns of the main frame
+main_frame.columnconfigure(0, weight=1)
+main_frame.columnconfigure(1, weight=6)
+main_frame.rowconfigure(0, weight=4)
+main_frame.rowconfigure(1, weight=1)
+main_frame.rowconfigure(2, weight=1) # added a new row for padding
 
 # Create the large textbox for txt_gpt
 txt_gpt = customtkinter.CTkTextbox(master=text_frame, wrap='word')
@@ -88,9 +92,13 @@ lbl_prompt.grid(row=1, column=0, padx=10, pady=(5,2), sticky='ne')
 btn_chat = customtkinter.CTkButton(text_frame, text="Send", command=lambda: update_win(""))
 btn_chat.grid(row=1, column=0, padx=5, pady=5, sticky='se')
 
+# Create a frame for padding
+padding_frame = customtkinter.CTkFrame(master=main_frame)
+padding_frame.grid(row=2, column=0, columnspan=2, sticky='ew')
+
 # Create the close button
-btn_close = customtkinter.CTkButton(app, text="Close", command=app.destroy)
-btn_close.place(relx=1, rely=1, anchor='se', padx=5, pady=5)
+btn_close = customtkinter.CTkButton(master=app, text="Close", command=app.destroy)
+btn_close.place(relx=1.0, rely=1.0, anchor='se', padx=10, pady=10)
 
 # Calculate the 80/20 split for the textboxes
 total_height = app.winfo_screenheight()
