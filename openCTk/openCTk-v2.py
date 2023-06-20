@@ -7,7 +7,9 @@ import os
 
 # import openAI API key
 # openai.api_key = os.environ.get('OPENAI_API')
+
 openai.api_key = "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"
+
 # messages = [
     # {"role": "user", "content": "You are a polite and helpful assistant"}
 #]
@@ -47,15 +49,16 @@ def code(event):
     error = txt_error.get(1.0, "end-1c")
     code_prompt = "I am writing a program, the code looks like this: " + "\n" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
 
-    code_messages.append({"role": "user", "input": code_prompt})
+    code_messages.append({"role": "user", "content": code_prompt})
     completion = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo-16k",
-        messages = code_messages 
+        messages = code_messages,
     )
-    chat_response = "AI says: " + completion.choices[0].code_messages.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
+    chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
     txt_code_gpt.insert("end", chat_response)
     txt_code_gpt.see('end')
     print(chat_response)
+
 # Set up app appearance
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("blue")
