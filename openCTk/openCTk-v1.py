@@ -7,7 +7,7 @@ import os
 
 # import openAI API key
 # openai.api_key = os.environ.get('OPENAI_API')
-openai.api_key = "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" 
+openai.api_key = "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"
 # messages = [
     # {"role": "user", "content": "You are a polite and helpful assistant"}
 #]
@@ -16,6 +16,13 @@ messages = [
         {'role': "user",
          "content": "You are a polite and helpful assistant.  Please summarize ideas with bullet points where appropriate, like after a paragraph of text explaining a concept for example.  Also make use of comparisons and/or analogies where appropriate.  Your responses shouldn't come off as patronizing or condescending."}
 ]
+
+
+code_messages = [
+        {'role': "user",
+         "content": "You are a polite and helpful coding assistant.  Your main goal is to fix code given to you, based on your knowledge and the error given to you.  Should you encounter a comment in the code and ti begins with the string 'prompt:', interepret the remaining text of the comment as a prompt from the user regarding specific output that should be generated, rather than implicit code completion.  If any changes have been made to the code, the response should end with a list of changes made."}
+        ]
+
 
 # chat function for sending prompt and clearing the prompt box on the normal tab
 def chat(event):
@@ -35,16 +42,17 @@ def chat(event):
     print(chat_response)
 
 def code(event):
+    global code_prompt
     code = txt_code.get(1.0, "end-1c")
     error = txt_error.get(1.0, "end-1c")
-    code_prompt = "I am writing a program, the code looks like this:" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
+    code_prompt = "I am writing a program, the code looks like this: " + "\n" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
 
-    messages.append({"role": "user", "input": code_prompt})
-    completion = openai.Edit.create(
-        model = "code-davinci-edit-001",
-        instruction="Look through the code and error provided and help to correct any issues in the program"
+    code_messages.append({"role": "user", "input": code_prompt})
+    completion = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo-16k",
+        messages = code_messages 
     )
-    chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
+    chat_response = "AI says: " + completion.choices[0].code_messages.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
     txt_code_gpt.insert("end", chat_response)
     txt_code_gpt.see('end')
     print(chat_response)
