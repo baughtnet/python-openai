@@ -43,7 +43,7 @@ customtkinter.set_default_color_theme("blue")
 
 # Create the app
 app = customtkinter.CTk()
-app.geometry("720x720")
+app.geometry("720x950")
 app.title("Custom OpenAI")
 
 # Create the tab view
@@ -62,8 +62,39 @@ tab_view.add("Document")
 # btn_frame = customtkinter.CTkFrame(app)
 # btn_frame.grid(padx=5, pady=5, sticky='se')
 
+#configure main frame for normal tab
 main_frame = customtkinter.CTkFrame(tab_view.tab("Normal"))
 main_frame.pack(fill='both', expand=True, padx=5, pady=5)
+
+# configure main frame for code tab
+code_frame = customtkinter.CTkFrame(tab_view.tab("Code"))
+code_frame.pack(fill='both', expand=True, padx=5, pady=5)
+
+# configure rows and columns of the code_frame
+code_frame.columnconfigure(0)
+code_frame.columnconfigure(1, weight=8)
+code_frame.columnconfigure(2)
+code_frame.rowconfigure(0, weight=4)
+code_frame.rowconfigure(1)
+code_frame.rowconfigure(2)
+
+# configure elements in code_frame
+txt_code_gpt = customtkinter.CTkTextbox(master=code_frame)
+txt_code_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
+txt_code = customtkinter.CTkTextbox(master=code_frame)
+txt_code.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
+txt_error = customtkinter.CTkTextbox(master=code_frame)
+txt_error.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
+
+lbl_code_gpt = customtkinter.CTkLabel(master=code_frame, text="Chat Says:")
+lbl_code_gpt.grid(row=0, column=0, padx=5, pady=5, sticky='ne')
+lbl_code_input = customtkinter.CTkLabel(master=code_frame, text="Current Code")
+lbl_code_input.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+lbl_code_error = customtkinter.CTkLabel(master=code_frame, text="Error")
+lbl_code_error.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
+
+btn_code = customtkinter.CTkButton(master=code_frame, text="Send", width=20)
+btn_code.grid(row=2, column=2, pady=15, padx=5, sticky='ns')
 
 # configure rows and columns of the main_frame
 main_frame.columnconfigure(0)
