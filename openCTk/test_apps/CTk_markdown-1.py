@@ -1,5 +1,7 @@
 # import libraries
-from time import sleep
+import markdown
+import tkinter as tk
+from tkhtmlview import HTMLLabel, HTMLText, RenderHTML
 import customtkinter
 from customtkinter.windows.widgets import appearance_mode
 import openai
@@ -21,8 +23,8 @@ messages = [
 def update_win(event):
     global content
     content = txt_prompt.get(1.0, "end-1c")
-    txt_gpt.insert("end", "You say:  " + content + "\n" + "---------------------------------------------------------------" + "\n")
-    txt_prompt.delete(1.0, 'end')
+    # txt_gpt.insert("end", "You say:  " + content + "\n" + "---------------------------------------------------------------" + "\n")
+    # txt_prompt.delete(1.0, 'end')
     chat()
 
 # chat function for adding AI response to txt_gpt text box
@@ -33,8 +35,16 @@ def chat():
         messages = messages
     )
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
-    txt_gpt.insert("end", chat_response)
-    txt_gpt.see('end')
+    # parse with markdown to format into HTML document
+    html_response = markdown.markdown(chat_response)
+
+    html_response = html_response.replace('<pre><code>', '<pre><code class="code-block">')
+    html_response = html_response.replace('<pre><code class="code-block">', '<pre class="code-block-wrapper"><code class="code-block">')
+    html_response = html_response.replace('</code></pre>', '</code></pre><button class="copy-button">Copy</button>')
+    html_gpt.html = html_response
+
+    # txt_gpt.insert("end", html_response)
+    # txt_gpt.see('end')
     print(chat_response)
 
 # Set up app appearance
@@ -73,8 +83,10 @@ main_frame.rowconfigure(0, weight=8)
 main_frame.rowconfigure(1)
 
 # text boxes for input and response
-txt_gpt = customtkinter.CTkTextbox(master=main_frame)
-txt_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
+# txt_gpt = customtkinter.CTkTextbox(master=main_frame)
+# txt_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
+html_gpt = HTMLText(main_frame, html="")
+html_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
 txt_prompt = customtkinter.CTkTextbox(master=main_frame)
 txt_prompt.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
 
