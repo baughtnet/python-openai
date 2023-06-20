@@ -7,7 +7,7 @@ import os
 
 # import openAI API key
 # openai.api_key = os.environ.get('OPENAI_API')
-openai.api_key = "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"
+openai.api_key = "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" 
 # messages = [
     # {"role": "user", "content": "You are a polite and helpful assistant"}
 #]
@@ -17,26 +17,37 @@ messages = [
          "content": "You are a polite and helpful assistant.  Please summarize ideas with bullet points where appropriate, like after a paragraph of text explaining a concept for example.  Also make use of comparisons and/or analogies where appropriate.  Your responses shouldn't come off as patronizing or condescending."}
 ]
 
-# update_win function for sending prompt and clearing the prompt box
-def update_win(event):
+# chat function for sending prompt and clearing the prompt box on the normal tab
+def chat(event):
     global content
     content = txt_prompt.get(1.0, "end-1c")
     txt_gpt.insert("end", "You say:  " + content + "\n" + "---------------------------------------------------------------" + "\n")
     txt_prompt.delete(1.0, 'end')
-    chat()
 
-# chat function for adding AI response to txt_gpt text box
-def chat():
     messages.append({"role": "user", "content": content})
     completion = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo-16k",
-        messages = messages
+        messages = messages,
     )
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
     txt_gpt.insert("end", chat_response)
     txt_gpt.see('end')
     print(chat_response)
 
+def code(event):
+    code = txt_code.get(1.0, "end-1c")
+    error = txt_error.get(1.0, "end-1c")
+    code_prompt = "I am writing a program, the code looks like this:" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
+
+    messages.append({"role": "user", "input": code_prompt})
+    completion = openai.Edit.create(
+        model = "code-davinci-edit-001",
+        instruction="Look through the code and error provided and help to correct any issues in the program"
+    )
+    chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
+    txt_code_gpt.insert("end", chat_response)
+    txt_code_gpt.see('end')
+    print(chat_response)
 # Set up app appearance
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("blue")
@@ -93,7 +104,7 @@ lbl_code_input.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 lbl_code_error = customtkinter.CTkLabel(master=code_frame, text="Error")
 lbl_code_error.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
 
-btn_code = customtkinter.CTkButton(master=code_frame, text="Send", width=20)
+btn_code = customtkinter.CTkButton(master=code_frame, text="Send", width=20, command=lambda: code(""))
 btn_code.grid(row=2, column=2, pady=15, padx=5, sticky='ns')
 
 # configure rows and columns of the main_frame
@@ -116,13 +127,13 @@ lbl_prompt = customtkinter.CTkLabel(master=main_frame, text="Prompt:")
 lbl_prompt.grid(row=1, column=0, padx=5, pady=5, sticky='ne')
 
 # buttons
-btn_chat = customtkinter.CTkButton(master=main_frame, width=20, text="Send", command=lambda: update_win(""))
+btn_chat = customtkinter.CTkButton(master=main_frame, width=20, text="Send", command=lambda: chat(""))
 btn_chat.grid(row=1, column=2, padx=5, pady=15, sticky='ns')
 
 btn_close = customtkinter.CTkButton(app, text="Exit", command=app.destroy)
 btn_close.pack(padx=5, pady=5, side='right')
 
-app.bind("<Shift-Return>", lambda event: update_win(""))
+app.bind("<Shift-Return>", lambda event: chat(""))
 
 # run the app
 app.mainloop()
