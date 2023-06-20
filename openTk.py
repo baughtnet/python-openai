@@ -5,8 +5,7 @@ from tkinter import *
 from tkinter import messagebox
 
 # Getting API key from environment variable
-openai.api_key = "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" 
-
+openai.api_key = os.environ.get('OPENAI_API')
 # Setting up Tkinter window
 window = Tk()
 window.geometry("950x850")
@@ -29,12 +28,6 @@ def update_win(event):
 
 # function clears text box for input, sends prompt to gpt and then prints response in the chat window below the user input  
 def chat():
-#    print("You pressed the chat button!")
-#    content = txt_prompt.get(1.0, "end-1c")
-#    txt_gpt.insert("end", content + "\n" +"\n")
-#    txt_prompt.delete('1.0', END)
-#    txt_gpt.pack()
-
     messages.append({"role": "user", "content": content})
     completion = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo",

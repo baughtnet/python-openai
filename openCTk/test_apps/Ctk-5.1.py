@@ -69,26 +69,26 @@ main_frame.rowconfigure(1, weight=1)
 text_frame = customtkinter.CTkFrame(master=main_frame)
 text_frame.grid(row=0, column=1, rowspan=2, padx=5, pady=5, sticky='nsew')
 text_frame.columnconfigure(0, weight=1)
-text_frame.rowconfigure(0, weight=8)
-text_frame.rowconfigure(1, weight=2)
+text_frame.rowconfigure(0, weight=1)
+text_frame.rowconfigure(1, weight=1)
 
 # Create the large textbox for txt_gpt
 txt_gpt = customtkinter.CTkTextbox(master=text_frame, wrap='word')
-txt_gpt.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+txt_gpt.grid(row=0, column=0, sticky='nsew')
 
-# Create the smaller frame for txt_prompt and btn_chat
+# Create the smaller frame for prompt and chat button
 prompt_frame = customtkinter.CTkFrame(master=text_frame)
-prompt_frame.grid(row=1, column=1, padx=5, pady=(0, 5), sticky='nsew')
-prompt_frame.columnconfigure(0, weight=8)
-prompt_frame.columnconfigure(1, weight=1)
+prompt_frame.grid(row=1, column=0, sticky='nsew')
+prompt_frame.columnconfigure(0, weight=1)
+prompt_frame.columnconfigure(1, weight=0)
 
 # Create the smaller textbox for txt_prompt
 txt_prompt = customtkinter.CTkTextbox(master=prompt_frame, wrap='word')
-txt_prompt.grid(row=0, column=0, padx=(5, 2), pady=5, sticky='nsew')
+txt_prompt.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
 
 # Create the send button
 btn_chat = customtkinter.CTkButton(prompt_frame, text="Send", command=lambda: update_win(""))
-btn_chat.grid(row=0, column=1, padx=(2, 5), pady=5, sticky='nsew')
+btn_chat.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
 
 # Create the "Chat says..." label
 lbl_gpt = customtkinter.CTkLabel(master=main_frame, text="Chat says...", height=1)
@@ -96,20 +96,20 @@ lbl_gpt.grid(row=0, column=0, padx=10, pady=30, sticky='ne')
 
 # Create the "Prompt:" label
 lbl_prompt = customtkinter.CTkLabel(master=main_frame, text="Prompt:", height=1)
-lbl_prompt.grid(row=1, column=0, padx=10, pady=(5, 2), sticky='ne')
+lbl_prompt.grid(row=1, column=0, padx=10, pady=(5,2), sticky='ne')
 
 # Create the close button
 btn_close = customtkinter.CTkButton(btn_frame, text="Close", command=app.destroy)
 btn_close.pack(padx=5, pady=5)
 
 # Calculate the 80/20 split for the textboxes
-total_width = app.winfo_screenwidth()
-txt_gpt_width = int(total_width * 0.8)
-txt_prompt_width = int(total_width * 0.2)
+total_height = app.winfo_screenheight()
+txt_gpt_height = int(total_height * 0.5)
+txt_prompt_height = int(total_height * 0.2)
 
-# Set the width of the textboxes
-txt_gpt.configure(width=txt_gpt_width)
-txt_prompt.configure(width=txt_prompt_width)
+# Set the height of the textboxes
+txt_gpt.configure(height=txt_gpt_height)
+txt_prompt.configure(height=txt_prompt_height)
 
 app.bind("<Shift-Return>", lambda event: update_win(""))
 
