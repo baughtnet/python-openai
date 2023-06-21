@@ -6,8 +6,8 @@ import openai
 import os
 
 # import openAI API key
-# openai.api_key = os.environ.get('OPENAI_API')
-openai.api_key = "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"
+openai.api_key = os.environ.get('OPENAI_API')
+
 # messages = [
     # {"role": "user", "content": "You are a polite and helpful assistant"}
 #]

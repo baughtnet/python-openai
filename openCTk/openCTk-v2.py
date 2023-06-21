@@ -6,9 +6,7 @@ import openai
 import os
 
 # import openAI API key
-# openai.api_key = os.environ.get('OPENAI_API')
-
-openai.api_key = "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"
+openai.api_key = os.environ.get('OPENAI_API')
 
 # messages = [
     # {"role": "user", "content": "You are a polite and helpful assistant"}
@@ -43,7 +41,27 @@ def chat(event):
     txt_gpt.see('end')
     print(chat_response)
 
-def code(event):
+def code_help(event):
+    global codeHelp_prompt
+    code = txt_code.get(1.0, "end-1c")
+    error = txt_error.get(1.0, "end-1c")
+    txt_code_gpt.insert("end", "You say: " + code + "\n\n" + error + "\n" + "---------------------------------------------------------------" + "\n")
+    txt_code.delete(1.0, 'end')
+    txt_error.delete(1.0, 'end')
+
+    codeHelp_prompt = "I am writing a program, the code looks like this: " + "\n" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
+
+    code_messages.append({"role": "user", "content": codeHelp_prompt})
+    completion = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo-16k",
+        messages = code_messages,
+    )
+    chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
+    txt_code_gpt.insert("end", chat_response)
+    txt_code_gpt.see('end')
+    print(chat_response)
+
+def code_create(event):
     global code_prompt
     code = txt_code.get(1.0, "end-1c")
     error = txt_error.get(1.0, "end-1c")
@@ -101,11 +119,12 @@ code_frame.rowconfigure(1)
 code_frame.rowconfigure(2)
 
 # configure elements in code_frame
-txt_code_gpt = customtkinter.CTkTextbox(master=code_frame)
+txt_code_gpt = customtkinter.CTkTextbox(master=code_frame, wrap='word')
+txt_code_gpt.configure(state="disabled")
 txt_code_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
-txt_code = customtkinter.CTkTextbox(master=code_frame)
+txt_code = customtkinter.CTkTextbox(master=code_frame, wrap='word')
 txt_code.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
-txt_error = customtkinter.CTkTextbox(master=code_frame)
+txt_error = customtkinter.CTkTextbox(master=code_frame, wrap='word')
 txt_error.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
 
 lbl_code_gpt = customtkinter.CTkLabel(master=code_frame, text="Chat Says:")
@@ -115,7 +134,7 @@ lbl_code_input.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 lbl_code_error = customtkinter.CTkLabel(master=code_frame, text="Error")
 lbl_code_error.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
 
-btn_code = customtkinter.CTkButton(master=code_frame, text="Send", width=20, command=lambda: code(""))
+btn_code = customtkinter.CTkButton(master=code_frame, text="Send", width=20, command=lambda: code_help(""))
 btn_code.grid(row=2, column=2, pady=15, padx=5, sticky='ns')
 
 # configure rows and columns of the main_frame
@@ -126,9 +145,11 @@ main_frame.rowconfigure(0, weight=8)
 main_frame.rowconfigure(1)
 
 # text boxes for input and response
-txt_gpt = customtkinter.CTkTextbox(master=main_frame)
+txt_gpt = customtkinter.CTkTextbox(master=main_frame, wrap='word')
+txt_gpt.configure(state="disabled")
 txt_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
-txt_prompt = customtkinter.CTkTextbox(master=main_frame)
+
+txt_prompt = customtkinter.CTkTextbox(master=main_frame, wrap='word')
 txt_prompt.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
 
 # labels for prompt and chat says
