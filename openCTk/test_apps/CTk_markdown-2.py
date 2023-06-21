@@ -84,7 +84,7 @@ def code_create(event):
     print(chat_response)
 
 def format_window(event, chat_response):
-    markdown_response = chat_response 
+    markdown_response = chat_response
     html_content = markdown.markdown(markdown_response)
 
     app_two = customtkinter.CTk()
