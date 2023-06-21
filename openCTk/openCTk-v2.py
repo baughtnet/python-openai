@@ -111,15 +111,8 @@ code_frame = customtkinter.CTkFrame(tab_view.tab("Code Fix"))
 code_frame.pack(fill='both', expand=True, padx=5, pady=5)
 
 # configure main frame for code tab
-code_gen_frame = customtkinter.CTkFrame(tab_view.tab("Code Gen"))
-code_gen_frame.pack(fill='both', expand=True, padx=5, pady=5)
-
-# configure rows and columns of the code_frame
-code_gen_frame.columnconfigure(0)
-code_gen_frame.columnconfigure(1, weight=8)
-code_gen_frame.columnconfigure(2)
-code_gen_frame.rowconfigure(0, weight=4)
-code_gen_frame.rowconfigure(1)
+create_frame = customtkinter.CTkFrame(tab_view.tab("Code Gen"))
+create_frame.pack(fill='both', expand=True, padx=5, pady=5)
 
 # configure rows and columns of the code_frame
 code_frame.columnconfigure(0)
@@ -129,14 +122,6 @@ code_frame.rowconfigure(0, weight=4)
 code_frame.rowconfigure(1)
 code_frame.rowconfigure(2)
 
-# configure elements in code_gen_frame
-txt_code_gen_gpt = customtkinter.CTkTextbox(master=code_gen_frame, wrap='word')
-txt_code_gen_gpt.configure(state="disabled")
-txt_code_gen_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
-txt_code_gen = customtkinter.CTkTextbox(master=code_gen_frame, wrap='word')
-txt_code_gen.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
-
-lbl_code_gpt = customtkinter.CTkLabel(master=code_gen_frame, text="Chat Says:")
 # configure elements in code_frame
 txt_code_gpt = customtkinter.CTkTextbox(master=code_frame, wrap='word')
 txt_code_gpt.configure(state="disabled")

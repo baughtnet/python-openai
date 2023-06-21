@@ -23,6 +23,10 @@ code_messages = [
          "content": "You are a polite and helpful coding assistant.  Your main goal is to fix code given to you, based on your knowledge and the error given to you.  Should you encounter a comment in the code and ti begins with the string 'prompt:', interepret the remaining text of the comment as a prompt from the user regarding specific output that should be generated, rather than implicit code completion.  If any changes have been made to the code, the response should end with a list of changes made."}
         ]
 
+create_messages = [
+        {'role': "user",
+         "content": "You are a polite and helpful coding assistant, you are someone with years of experience accross all programming languages.  Your main goal is to create code based on information given to you by the user. Code created should be efficient, commented and a brief overview of the code given at the end of the response.  You should always ask clarifiying questions before generating code to reduce the need to debug."}
+        ]
 
 # chat function for sending prompt and clearing the prompt box on the normal tab
 def chat(event):
@@ -62,19 +66,19 @@ def code_help(event):
     print(chat_response)
 
 def code_create(event):
-    global code_prompt
-    code = txt_code.get(1.0, "end-1c")
-    error = txt_error.get(1.0, "end-1c")
-    code_prompt = "I am writing a program, the code looks like this: " + "\n" + code + "The error I get looks like this:" + error + "Can you help me fix my code?"
+    global codeCreate_prompt
+    code = txt_code_gen.get(1.0, "end-1c")
+    error = txt_prompt_gen.get(1.0, "end-1c")
+    codeCreate_prompt = code
 
-    code_messages.append({"role": "user", "content": code_prompt})
+    create_messages.append({"role": "user", "content": codeCreate_prompt})
     completion = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo-16k",
-        messages = code_messages,
+        messages = create_messages,
     )
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" "\n" + "---------------------------------------------------------------" + "\n"
-    txt_code_gpt.insert("end", chat_response)
-    txt_code_gpt.see('end')
+    txt_code_gen.insert("end", chat_response)
+    txt_code_gen.see('end')
     print(chat_response)
 
 # Set up app appearance
@@ -130,16 +134,22 @@ code_frame.rowconfigure(1)
 code_frame.rowconfigure(2)
 
 # configure elements in code_gen_frame
-txt_code_gen_gpt = customtkinter.CTkTextbox(master=code_gen_frame, wrap='word')
-txt_code_gen_gpt.configure(state="disabled")
-txt_code_gen_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
 txt_code_gen = customtkinter.CTkTextbox(master=code_gen_frame, wrap='word')
-txt_code_gen.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
+txt_code_gen.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
+txt_prompt_gen = customtkinter.CTkTextbox(master=code_gen_frame, wrap='word')
+txt_prompt_gen.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
 
-lbl_code_gpt = customtkinter.CTkLabel(master=code_gen_frame, text="Chat Says:")
+lbl_code_gen_gpt = customtkinter.CTkLabel(master=code_gen_frame, text="Chat Says:")
+lbl_code_gen_gpt.grid(row=0, column=0, padx=5, pady=5, sticky='ne')
+
+lbl_code_gen_input = customtkinter.CTkLabel(master=code_gen_frame, text="Current Code")
+lbl_code_gen_input.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+
+btn_code_gen = customtkinter.CTkButton(master=code_gen_frame, width=20, text="Send", command=lambda: code_create(""))
+btn_code_gen.grid(row=1, column=2, padx=5, pady=15, sticky='ns')
+
 # configure elements in code_frame
 txt_code_gpt = customtkinter.CTkTextbox(master=code_frame, wrap='word')
-txt_code_gpt.configure(state="disabled")
 txt_code_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
 txt_code = customtkinter.CTkTextbox(master=code_frame, wrap='word')
 txt_code.grid(columnspan=2, row=1, column=1, padx=5, pady=5, sticky='nsew')
@@ -165,7 +175,6 @@ main_frame.rowconfigure(1)
 
 # text boxes for input and response
 txt_gpt = customtkinter.CTkTextbox(master=main_frame, wrap='word')
-txt_gpt.configure(state="disabled")
 txt_gpt.grid(columnspan=2, row=0, column=1, padx=5, pady=5, sticky='nsew')
 
 txt_prompt = customtkinter.CTkTextbox(master=main_frame, wrap='word')
