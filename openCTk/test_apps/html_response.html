@@ -1,0 +1,27 @@
+<div style="text-align: center; border: 1px solid #657b83; background-color: #002b36; color: #839496; padding: 10px; margin: 10px auto; max-width: 80%;">
+    <pre><code>
+def chat():
+    messages.append({"role": "user", "content": content})
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
+    )
+    chat_response = "AI says: " + completion.choices[0].message.content + "\n" + "---------------------------------------" + "\n"
+    txt_gpt.insert("end", chat_response)
+    txt_gpt.see(END)
+
+    print(chat_response)
+
+    # Convert the chat response to HTML
+    html_response = markdown(chat_response)
+
+    print(html_response)
+    </code></pre>
+    <button onclick="copyToClipboard()">Copy</button>
+</div>
+
+<script>
+    function copyToClipboard() {
+        /* JavaScript code to copy the code block to clipboard */
+    }
+</script>

@@ -19,6 +19,10 @@ messages = [
     {"role": "user", "content": "You are a polite and helpful assistant"}
 ]
 
+# Output file paths
+chat_response_file = "chat_response.md"
+html_response_file = "html_response.html"
+
 # called when "chat" button is pressed. gets user input and places it in the chat window
 # data is put into global variable content and then is passed to the chat() function
 def update_win(event):
@@ -40,11 +44,22 @@ def chat():
     txt_gpt.see(END)
 
     print(chat_response)
+    
+    # Save chat response as .md file
+    with open(chat_response_file, "w") as file:
+        file.write(chat_response)
 
     # Convert the chat response to HTML
     html_response = markdown(chat_response)
 
+    # Convert the code blocks to HTML
+    html_response = generate_code_box(html_response)
+
     print(html_response)
+
+    # Save HTML response as .html file
+    with open(html_response_file, "w") as file:
+        file.write(html_response)
 
     # Open new window to display HTML content
     def format_html():
@@ -58,6 +73,23 @@ def chat():
 
     # Format button event handler
     btn_format["command"] = format_html
+
+def generate_code_box(html):
+    lines = html.split("\n")
+    in_code_flag = False
+    formatted_html_lines = []
+    
+    for line in lines:
+        if line.startswith("```"):
+            line = "<pre>" + line[3:] + "</pre>"
+            if in_code_flag:
+                line += "</div>"
+                in_code_flag = False
+            else:
+                line += "<div>"
+                in_code_flag = True
+        formatted_html_lines.append(line)
+    return "\n".join(formatted_html_lines)
 
 # sets up text boxes for chat and input
 lbl_gpt = Label(window, text="Chat says...").pack()
