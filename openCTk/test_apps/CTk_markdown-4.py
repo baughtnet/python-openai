@@ -2,7 +2,8 @@
 import os
 import openai
 from tkinter import *
-from markdown import Markdown
+from tkinter import messagebox
+from markdown import markdown
 from tkhtmlview import HTMLScrolledText
 
 # Getting API key from environment variable
@@ -17,22 +18,6 @@ window.title("openTkv1.0")
 messages = [
     {"role": "user", "content": "You are a polite and helpful assistant"}
 ]
-
-# Create a Markdown instance
-markdown_converter = Markdown()
-
-# Function to convert Markdown to HTML
-def convert_to_html(markdown_text):
-    html_body = markdown_converter.convert(markdown_text)
-    
-    # Set the background and text color
-    html_body = f'<div style="background-color: black; color: white;">{html_body}</div>'
-    
-    # Replace code blocks with styled code boxes
-    html_body = html_body.replace('<pre><code>', '<div style="background-color: white; color: black; padding: 10px;"><code>')
-    html_body = html_body.replace('</code></pre>', '</code></div>')
-    
-    return html_body
 
 # called when "chat" button is pressed. gets user input and places it in the chat window
 # data is put into global variable content and then is passed to the chat() function
@@ -53,18 +38,22 @@ def chat():
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" + "---------------------------------------" + "\n"
     txt_gpt.insert("end", chat_response)
     txt_gpt.see(END)
-    
-    # Convert chat_response to HTML
-    html_response = convert_to_html(chat_response)
-    
+
+    # Convert the chat response to HTML
+    html_response = markdown(chat_response)
+
     # Open new window to display HTML content
-    html_window = Toplevel(window)
-    html_window.geometry("800x600")
-    html_window.title("Chat Response")
-    
-    # Display HTML content in a scrollable text box
-    lbl_html = HTMLScrolledText(html_window, html=html_response)
-    lbl_html.pack(expand=True, fill='both')
+    def format_html():
+        html_window = Toplevel(window)
+        html_window.geometry("800x600")
+        html_window.title("Chat Response")
+
+        # Display HTML content in a label
+        lbl_html = HTMLScrolledText(html_window, html=html_response)
+        lbl_html.pack(expand=True, fill='both')
+
+    # Format button event handler
+    btn_format["command"] = format_html
 
 # sets up text boxes for chat and input
 lbl_gpt = Label(window, text="Chat says...").pack()
@@ -75,11 +64,11 @@ lbl_prompt = Label(window, text="Prompt: ").pack()
 txt_prompt = Text(window, height=8, wrap=WORD)
 txt_prompt.pack(fill='x', padx=10, pady=10)
 
-# sets up chat, format, and close buttons
+# sets up chat, format, and close button
 btn_close = Button(window, text="Close", command=window.destroy)
 btn_close.pack(side=RIGHT, padx=5, pady=5)
 
-btn_format = Button(window, text="Format", command=chat)
+btn_format = Button(window, text="Format")
 btn_format.pack(side=RIGHT, padx=5, pady=5)
 
 btn_chat = Button(window, text="Send", command=lambda: update_win(""))
