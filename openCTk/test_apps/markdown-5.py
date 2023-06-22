@@ -18,7 +18,8 @@ messages = [
 def update_win(event):
     global content
     content = txt_prompt.get(1.0, "end-1c")
-    txt_gpt.insert("end", "You say:  " + content + "\n" + "\n")
+    html_response = "<h2>Welcome to ChatGPT Custom</h2><br><hr><br>"
+    txt_gpt.add_html("You say:  " + content)
     txt_prompt.delete('1.0', END)
     chat()
 
@@ -29,12 +30,13 @@ def chat():
         messages=messages
     )
     chat_response = "AI says: " + completion.choices[0].message.content + "\n" + "---------------------------------------" + "\n"
-    txt_gpt.insert("end", chat_response)
-    txt_gpt.see(END)
+    # txt_gpt.insert("end", chat_response)
+    # txt_gpt.see(END)
 
     print(chat_response)
 
     html_response = markdown(chat_response)
+    txt_gpt.add_html(html_response)
 
     print(html_response)
 
@@ -50,8 +52,10 @@ def chat():
     btn_format["command"] = format_html
 
 lbl_gpt = Label(window, text="Chat says...").pack()
-txt_gpt = Text(window, wrap=WORD)
-txt_gpt.pack(padx=10, pady=10, expand=True, fill='both')
+txt_gpt = HtmlFrame(window)
+txt_gpt.pack(fill='both', expand=True)
+# txt_gpt = Text(window, wrap=WORD)
+# txt_gpt.pack(padx=10, pady=10, expand=True, fill='both')
 
 lbl_prompt = Label(window, text="Prompt: ").pack()
 txt_prompt = Text(window, height=8, wrap=WORD)
