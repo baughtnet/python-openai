@@ -88,7 +88,7 @@ customtkinter.set_default_color_theme("blue")
 
 # Create the app
 app = customtkinter.CTk()
-app.geometry("720x950")
+app.geometry("800x600")
 app.title("Custom OpenAI")
 
 # Create the tab view
