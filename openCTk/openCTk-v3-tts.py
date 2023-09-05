@@ -1,9 +1,15 @@
 # import libraries
 from time import sleep
+import tkinter
 import customtkinter
 from customtkinter.windows.widgets import appearance_mode
 import openai
 import os
+import torch
+from time import sleep
+from playsound import playsound as pl
+from TTS.api import TTS
+import speech_recognition as sr
 
 # import openAI API key
 openai.api_key = os.environ.get('OPENAI_API')
@@ -14,7 +20,7 @@ openai.api_key = os.environ.get('OPENAI_API')
 
 messages = [
         {'role': "user",
-         "content": "You are a polite and helpful assistant.  Please summarize ideas with bullet points where appropriate, like after a paragraph of text explaining a concept for example.  Also make use of comparisons and/or analogies where appropriate.  Your responses shouldn't come off as patronizing or condescending."}
+         "content": "You are a polite and helpful assistant."}
 ]
 
 
@@ -28,6 +34,39 @@ create_messages = [
          "content": "You are a polite and helpful coding assistant, you are someone with years of experience accross all programming languages.  Your main goal is to create code based on information given to you by the user. Code created should be efficient, commented and a brief overview of the code given at the end of the response.  You should always ask clarifiying questions before generating code to reduce the need to debug."}
         ]
 
+# function for handling speech checkbox
+def speechbox_event():
+    # speak_txt(chat_response)
+    pass
+
+def speak_txt(command):
+    # setup device for torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model_name = "tts_models/en/jenny/jenny"
+    tts = TTS(model_name)
+
+    # run tts
+    file = tts.tts_to_file(text=command, file='/tmp/temp.wav')
+    pl(file)
+
+# initialize the recognizer
+r = sr.Recognizer()
+
+def record_txt():
+    try:
+        with sr.Microphone() as source2:
+
+            r.adjust_for_ambient_noise(source2, duration=0.2)
+            print("Listening...")
+            audio2 = r.listen(source2)
+            
+            text = r.recognize_google(audio2)
+            txt_prompt.insert("end", text)
+            # return text
+    except sr.RequestError as e:
+        print("Could not request results: {0}".format(e))
+    except sr.UnknownValueError:
+            print("An unknown error has occured!")
 # chat function for sending prompt and clearing the prompt box on the normal tab
 def chat(event):
     global content
@@ -44,6 +83,9 @@ def chat(event):
     txt_gpt.insert("end", chat_response)
     txt_gpt.see('end')
     print(chat_response)
+
+    if check_var_speech.get() == "on":
+        speak_txt(chat_response)
 
 def code_help(event):
     global codeHelp_prompt
@@ -64,6 +106,10 @@ def code_help(event):
     txt_code_gpt.insert("end", chat_response)
     txt_code_gpt.see('end')
     print(chat_response)
+
+    # checks to see whether response should be read aloud
+    if check_var_speech.get() == "on":
+        speak_txt(chat_response)
 
 def code_create(event):
     global codeCreate_prompt
@@ -183,6 +229,16 @@ lbl_code_gen_input.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
 
 btn_code_gen = customtkinter.CTkButton(master=code_gen_frame, width=20, text="Send", command=lambda: code_create(""))
 btn_code_gen.grid(row=1, column=2, padx=5, pady=15, sticky='ns')
+
+check_var_speech = tkinter.StringVar(value="off")
+checkbox_speech = customtkinter.CTkCheckBox(app, text="Speech", command=speechbox_event,
+                                            variable=check_var_speech, onvalue="on", offvalue="off")
+checkbox_speech.pack(padx=5, pady=5, side='left')
+# checkbox = customtkinter.CTkbutton(app, text="Speech", variable=checkbox_var)
+# checkbox.pack(padx=5, pady=5, side='right')
+
+btn_stt = customtkinter.CTkButton(app, text="Speech to Text", command=record_txt)
+btn_stt.pack(padx=5, pady=5, side='right')
 
 btn_close = customtkinter.CTkButton(app, text="Exit", command=app.destroy)
 btn_close.pack(padx=5, pady=5, side='right')
