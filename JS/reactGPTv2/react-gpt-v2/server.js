@@ -6,19 +6,19 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-const API_KEY = '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'
+const API_KEY = process.env.OPENAI_API
 
 app.post('/completions', async (req, res) => {
     const options = {
         method: "POST",
         headers: {
-                "Authorization": 'Bearer ${API_KEY}',
+                "Authorization": `Bearer ${API_KEY}`,
                 "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: "how are you"}],
-            max_tokens: 100,
+            model: "gpt-4-1106-preview",
+            messages: [{ role: "user", content: req.body.message}],
+            // max_tokens: 100,
             })
         }
 

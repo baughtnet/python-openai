@@ -93,6 +93,7 @@ input {
       rgba(0, 0, 0, 0.05) 0 4px 6px,
       rgba(0, 0, 0, 0.05) 0 12px 3px,
       rgba(0, 0, 0, 0.05) 0 -3px 5px;
+  word-wrap: break-word;
 }
 
 input:focus {
@@ -105,4 +106,31 @@ input:focus {
   right: 0;
   cursor: pointer;
   font-size: 33px;
+}
+
+.feed {
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+.feed li {
+	background-color: #444654;
+	display: flex;
+	width: auto;
+	padding: 20px;
+	margin: 20px;
+}
+
+.feed p {
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 14px;
+	text-align: left;
+}
+
+.feed p.role {
+	min-width: 100px;
 }
