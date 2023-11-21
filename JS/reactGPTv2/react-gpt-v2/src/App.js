@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 
 const App = () => {
-  const [ value, setValue ] = useState(null)
+  // const [ value, setValue ] = useState(null)
+  const [title, setTitle] = useState(null)
+  const [request, setRequest] = useState(null)
   const [ message, setMessage ] = useState(null)
   const [ previousChats, setPreviousChats ] = useState([])
   const [ currentTitle, setCurrentTitle ] = useState(null)
@@ -9,20 +11,26 @@ const App = () => {
   const createNewChat = () => {
     setMessage(null)
     setCurrentTitle(null)
-    setValue("")
+    // setValue("")
+    setRequest(null)
   }
 
   const handleClick = (uniqueTitle) => {
     setCurrentTitle(uniqueTitle)
     setMessage(null)
-    setValue("")
+    // setValue("")
+    setRequest(null)
+  }
+
+  const handleChange = (e) => {
+    setRequest(e.target.value)
   }
 
   const getMessages = async () => {
     const options = {
       method: "POST",
       body : JSON.stringify({
-        message: value  
+        message: request,
       }),
       headers: {
         "Content-Type": "application/json"
@@ -36,30 +44,30 @@ const App = () => {
     } catch (error) {
       console.log(error)
     }
+    setRequest('')
   }
 
 useEffect(() => {
-  console.log(currentTitle, value, message)
-  if (!currentTitle && value && message) {
-    setCurrentTitle(value)
+  console.log(currentTitle, request, message)
+  if (!currentTitle && request && message) {
+    setCurrentTitle(request)
   }
-  if (currentTitle && value && message) {
-    setPreviousChats(prevChats => (
+  if (currentTitle && request && message) {
+    setPreviousChats((prevChats) => 
       [...prevChats,
         {
           title: currentTitle,
           role: "user",
-          content: value
+          content: request 
         },
         {
           title: currentTitle,
           role: message.role,
           content: message.content
-        }
-      ]
-    ))
+        },
+      ])
   }
-}, [message, currentTitle])
+}, [message, currentTitle, request])
 
     console.log(previousChats)
     const currentChat = previousChats.filter(previousChat => previousChat.title === currentTitle)
@@ -88,7 +96,7 @@ useEffect(() => {
         </ul>
         <div className="bottom-section">
           <div className="input-container">
-            <input value={value}  onChange={(e) => setValue(e.target.value)}/>
+            <input value={request}  onChange={handleChange}/>
             <div id="submit" onClick={getMessages}>&#x27A2;</div>
         </div>
         <p className="info">
