@@ -1,7 +1,7 @@
 # flask app for simple integration with openAI API
 
 from flask import Flask, request, render_template, session, redirect, url_for
-import openai
+from openai import OpenAI
 import os
 
 
@@ -29,11 +29,14 @@ def set_api_key():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    openai.api_key = session['api_key']
+    client = OpenAI(
+            api_key = session['api_key'],
+            )
+
     user_input = request.form['user-input']
     messages.append({"role": "user", "content": user_input})
 
-    completion = openai.ChatCompletion.create(
+    completion = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=messages
         )
@@ -41,8 +44,12 @@ def chat():
     response = completion.choices[0].message.content
     messages.append({"role": "assistant", "content": response})
 
+    print(response)
+    print("\n")
+    print(messages)
+
     return render_template('chat.html', user_input=user_input, messages=messages, response=response)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
