@@ -29,15 +29,17 @@ def set_api_key():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    client = OpenAI(
-            api_key = session['api_key'],
-            )
+    api_key = session['api_key']
+
+    client = OpenAI(api_key=api_key)
+
+    model_select = request.form['model-select']
 
     user_input = request.form['user-input']
     messages.append({"role": "user", "content": user_input})
 
     completion = client.chat.completions.create(
-        model="gpt-4-1106-preview",
+        model=model_select,
         messages=messages
         )
 
@@ -48,7 +50,7 @@ def chat():
     print("\n")
     print(messages)
 
-    return render_template('chat.html', user_input=user_input, messages=messages, response=response)
+    return render_template('chat.html', user_input=user_input, model_select=model_select, messages=messages, response=response)
 
 
 if __name__ == '__main__':
