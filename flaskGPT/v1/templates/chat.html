@@ -2,14 +2,33 @@
 <html>
 <head>
     <title>flaskGPT Chat</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400;700;800;900&display=swap" rel="stylesheet">
+    
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 </head>
 <body>
-    <h1>flaskGPT Chat</h1>
-    <div id="chat-history">
+    <div id="header">
+        <div id="title">
+            <h1>flaskGPT Chat</h1>
         </div>
-    <form id="chat-form" action="/chat" method="post">
+    </div>
+
+    <div id="chat-container">
+        <div id="chat-history">
+            {% for message in messages %}
+                <div class="message">
+                    <strong>{{ message['role'] }}:</strong>
+                    {{ message['content'] | safe }} <br>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <form id="chat-form" action="/chat" method="post">
         <input type="text" id="user-input" name="user-input" placeholder="Type your message here..." required>
 
         <select id="model-select" name="model-select">
@@ -19,7 +38,13 @@
             <option value="gpt-4-1106-preview">gpt-4-32k</option>
         </select>
 
+        <select id="prompt-select" name="prompt-select">
+            <option value="normal">Standard Assistant Prompt</option>
+            <option value="programmer">Programming prompt</option>
+        </select>
+
         <button type="submit">Send</button>
     </form>
+    </div>
 </body>
 </html>

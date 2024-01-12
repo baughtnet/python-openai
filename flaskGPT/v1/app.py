@@ -2,14 +2,15 @@
 
 from flask import Flask, request, render_template, session, redirect, url_for
 from openai import OpenAI
+from bs4 import BeautifulSoup
+import markdown
 import os
-
 
 app = Flask(__name__)
 
 app.secret_key = os.urandom(24)
 
-messages = [{"role": "user", "content": "You are a polite and helpful assistant"}]
+messages = [{"role": "user", "content": "You are a polite and helpful assistant.  Do not reply to this prompt.  It is simply for seting up a base model."}]
 
 
 @app.route('/')
@@ -29,6 +30,22 @@ def set_api_key():
 
 @app.route('/chat', methods=['POST'])
 def chat():
+
+
+    # def code_clean(html_content):
+    #     soup = BeautifulSoup(html_content, 'html.parser')
+    #     for code in soup.find_all('code'):
+    #         pre = code.find_parent('pre')
+    #         if pre:
+    #             # Style pre with a code box if it's not already styled as a class
+    #             pre['class'] = pre.get('class', []) + ['codebox']
+    #         else:
+    #             # for inline code add a code style
+    #             code['class'] = code.get('class', []) + ['inline-code']
+    #
+    # return str(html_content) 
+
+    
     api_key = session['api_key']
 
     client = OpenAI(api_key=api_key)
@@ -44,11 +61,13 @@ def chat():
         )
 
     response = completion.choices[0].message.content
-    messages.append({"role": "assistant", "content": response})
+    html_content = markdown.markdown(response)
 
-    print(response)
+    messages.append({"role": "assistant", "content": html_content})
+
+    print(html_content)
     print("\n")
-    print(messages)
+    # print(messages)
 
     return render_template('chat.html', user_input=user_input, model_select=model_select, messages=messages, response=response)
 
