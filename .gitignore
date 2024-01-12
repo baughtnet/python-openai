@@ -1,0 +1,7 @@
+/flaskGPT/v1/bin/
+/flaskGPT/v1/lib/
+/flaskGPT/v1/lib64/
+/flaskGPT/v1/pyvenv.cfg
+/openCTK/*.wav
+venv/
+
