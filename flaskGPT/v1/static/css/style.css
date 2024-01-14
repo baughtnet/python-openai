@@ -8,7 +8,7 @@ body {
     background-color: #568086;
 }
 
-h1 {
+h6 {
     margin: 0px;
     padding: 0px;
     color: #18AA6D;
@@ -45,6 +45,7 @@ h1 {
     margin-bottom: 10px;
     font-family: 'Source Code Pro', monospace;
     font-weight: 400;
+    font-size: 16px;
     background-color: #fff;
 }
 
@@ -64,4 +65,29 @@ h1 {
     color: #E69250;
     font-weight: 700;
     font-style: Bold;
+}
+
+/* .code { */
+/*   position: relative; */
+/*   margin: 20px 0; */
+/* } */
+/**/
+/* .code pre[class<em>="language-"] { */
+/*   padding-top: 30px; */
+/*   padding-right: 50px; */
+/* } */
+/* .copy-button { */
+/*   position: absolute; */
+/*   top: 5px; */
+/*   right: 5px; */
+/*   border: none; */
+/*   border-radius: 2px; */
+/*   padding: 5px 10px; */
+/*   background-color: #008CBA; */
+/*   color: white; */
+/*   cursor: pointer; */
+/* } */
+
+.copy-button:hover {
+  background-color: #005f73;
 }
