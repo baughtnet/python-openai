@@ -47,7 +47,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # Initialize the messages list
-messages = [{"role": "user", "content": "You are a polite and helpful assistant.  Do not reply to this prompt.  It is simply for seting up a base model."}]
+messages = [{"role": "system", "content": "You are a polite and helpful assistant."}]
 
 def parse_md_with_ext(markdown_text):
     extensions = [CodeBlockExtension()]
@@ -82,19 +82,26 @@ def chat():
     user_input = request.form['user-input']
     messages.append({"role": "user", "content": user_input})
 
-    completion = client.chat.completions.create(
+    stream = client.chat.completions.create(
         model=model_select,
-        messages=messages
+        messages=messages,
+        stream=True,
         )
 
-    response = completion.choices[0].message.content
-    html_content = parse_md_with_ext(response)
+    response = ""
+    for chunk in stream:
+        if chunk.choices[0].delta.content is not None:
+            response += chunk.choices[0].delta.content
+            print(response)
+            html_content = parse_md_with_ext(response)
+
+    # html_content = parse_md_with_ext(response)
 
     # final_response = md_to_html(response)
 
     messages.append({"role": "assistant", "content": html_content})
 
-    print(response)
+    # print(response)
     print("\n")
     print('-------------------------------------')
     print(html_content)

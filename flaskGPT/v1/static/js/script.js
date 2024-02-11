@@ -29,7 +29,7 @@ chatForm.addEventListener('submit', function(event) {
 
 // Add event listener for enter key (optional)
 userInput.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
+  if (event.ctrlKey && event.key === 'Enter') {
     userInput.submit();
   }
 });

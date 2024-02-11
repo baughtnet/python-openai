@@ -21,7 +21,7 @@
     <div id="chat-container">
         <div id="chat-history">
             {% for message in messages %}
-                <div class="message">
+            <div class="message {% if message['role'] == 'user' %}user-message{% else %}assistant-message{% endif%}">
                     <strong>{{ message['role'] }}:</strong>
                     {{ message['content'] | safe }} <br>
                 </div>
