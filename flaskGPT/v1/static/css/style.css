@@ -1,7 +1,17 @@
+/* CSS HEX */
+--fern-green: #678541;
+--pumpkin: #ff8132;
+--eerie-black: #17191b;
+--cambridge-blue: #6a9589;
+--indigo-dye: #2d4f67;
+--red-cmyk: #e82424;
+--silver: #aeaeae;
+--white: #fdfdfd;
+
 body {
-  font-family: monospace;
-  background-color: #222;
-  color: #eee;
+  font-family: "MesloLGS Nerd Font", "DejaVu Sans Mono", "Liberation Mono", "Consolas", "Monaco", "Courier New", "Courier", "monospace";
+  background-color: #17191b;
+  color: #aeaeae;
   margin: 0;
   padding: 20px;
 }
@@ -9,7 +19,7 @@ body {
 #title {
     margin: 0px;
     padding: 0px;
-    color: #18AA6D;
+    color: #678541;
     height: 3rem;
     font-family: 'Source Code Pro', monospace;
     font-size: xxx-large;
@@ -17,12 +27,13 @@ body {
 }
 
 #chat-container {
-  width: 850;
+  width: 90%;   /* Corrected value to include unit */
   margin: 0 auto;
-  background-color: #333;
-  border: 1px solid #444;
+  background-color: #aeaeae; 
+  border: 1px solid #e82424; 
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
 }
 
 .chat-header {
@@ -32,29 +43,83 @@ body {
 }
 
 #chat-history {
-  height: 300px;
+  min-height: 300px;
+  max-height: 65vh;
+  max-width: auto;
   overflow-y: scroll;
   padding: 10px;
+  margin: 20px;
+  border: 1px solid #678541; 
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #17191b; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 12px;
 }
 
 #chat-history .user-message {
-    background-color: darkgreen;
-    color: darkorange;
+    background-color: #;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 500;
+    color: #ff8132;
+    border: 2px solid #315603;
+    border-left: 5px solid #007bff;
+    border-top-right-radius: 7.7px;
     font-style: bold;
-    font-size: 22x;
+    font-size: 22px;
+    margin: 10px;
+    padding: 10px;
 }
 
 #chat-history .assistant-message {
-    
+    background-color: #17191b;
+    color: #aeaeae;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    border: 2.5px solid #aeaeae;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 7.5px;
 }
 
-#chat-text {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 5px;
-  background-color: #444;
-  color: #ddd;
+#chat-history .user-message strong {
+  color: #007bff;
+  font-weight: 800;
+  padding: 3px;
+  margin: 5px;
+  margin-left: 0px;
+  background-color: #aeaeae;
+  border-radius: 7.5px;
+  color: #17191b;
+  font-size: 24px;
 }
+
+#chat-history .assistant-message strong {
+  font-weight: 800;
+  padding: 5px;
+  margin: 5px;
+  background-color: #aeaeae;
+  border-top-right-radius: 7.5px;
+  color: #17191b;
+  font-size: 24px;
+}
+
+#chat-history strong {
+    font-weight: bold;
+    font-size: 22px;
+    width: 100%;
+}
+/* #chat-text { */
+/*   display: inline-block; */
+/*   padding: 5px 10px; */
+/*   border-radius: 5px; */
+/*   background-color: #444; */
+/*   color: #ddd; */
+/* } */
 
 #chat-form {
   display: flex;
@@ -78,6 +143,7 @@ body {
   border: 1px solid #ddd;
   background-color: #444;
   color: #ddd;
+  font-size: 16px;
 }
 
 #send-button {
@@ -89,21 +155,20 @@ body {
 }
 
 #chat-history pre {
-    background-color: #f5f5f5;
     border: 1px solid #ddd;
-    border-left: 3px solid #f36d33;
-    max-width: 70vh;
+    border-left: 5px solid #a30000;
+    max-width: 85vh;
     padding: 1em;
-    margin: 1em 0;
     overflow: auto;
-    font-family: "Courier New", Courier, monospace;
-    white-space: pre-wrap;
+    font-family: "SauceCodePro", monospace;
+    white-space: pe-wrap;
     word-break: break-all;
     line-height: 1.5;
 }
 
 #chat-history code {
-    color: #333;
+    color: #678541;;
+    padding: 3px;
     font-size: 0.95em;
 }
 

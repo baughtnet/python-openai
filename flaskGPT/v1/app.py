@@ -99,6 +99,8 @@ def chat():
     # html_content = parse_md_with_ext(response)
 
     # final_response = md_to_html(response)
+    stream_content = parse_md_with_ext(response)
+
 
     messages.append({"role": "assistant", "content": html_content})
 
@@ -106,6 +108,7 @@ def chat():
     print("\n")
     print('-------------------------------------')
     print(html_content)
+    
 
     return render_template('chat.html', user_input=user_input, model_select=model_select, messages=messages, response=response)
 
