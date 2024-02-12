@@ -31,5 +31,7 @@ chatForm.addEventListener('submit', function(event) {
 userInput.addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'Enter') {
     userInput.submit();
+  } else if (enter.key === 'Enter') {
+    event.preventDefault();
   }
 });

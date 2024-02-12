@@ -3,6 +3,7 @@
 from flask import Flask, request, render_template, session, redirect, url_for
 from openai import OpenAI
 from html import escape
+from collections import deque
 import markdown
 import os
 import re
@@ -47,7 +48,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # Initialize the messages list
-messages = [{"role": "system", "content": "You are a polite and helpful assistant."}]
+messages = deque(maxlen=5)
 
 def parse_md_with_ext(markdown_text):
     extensions = [CodeBlockExtension()]
