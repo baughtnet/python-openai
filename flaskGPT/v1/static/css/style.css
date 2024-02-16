@@ -1,4 +1,6 @@
 body {
+    font-family: SauceCodePro, monospace;
+    font-size: 16px;
     background-color: #242d35;
     color: #f6f6f6;
 }
@@ -13,4 +15,24 @@ body {
     font-weight: bolder;
     padding: 20px 20px 0 20px;
     background-color: #9a9d9a;
+}
+
+#chat-container  {
+    margin: 10px;
+    padding: 10px;
+    display: grid;
+    grid-template-rows: 2fr 1fr 0.25fr;
+    background-color: #9a9d9a;
+    width: 90vh;
+    border-radius: 15px;
+}
+
+#chat-history {
+    background-color: #11792d;
+    color: #f6f6f6;
+    width: 100%;
+    min-height: 300px;
+    max-height: 65vh;
+    color: #fff;
+    overflow-y: scroll;
 }
