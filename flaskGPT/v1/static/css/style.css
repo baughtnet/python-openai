@@ -6,15 +6,59 @@ body {
 }
 
 #header {
-    font-family: "MesloLGS Nerd Font";
     text-align: right;
 }
 
 #header h1 {
+    font-family: 'Source Code Pro', monospace;
     font-size: 32px;
     font-weight: bolder;
     padding: 20px 20px 0 20px;
     background-color: #9a9d9a;
+}
+
+#api-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 100vh;
+}
+
+#api {
+    padding: 20px;
+    border: 3px solid #f6f6f6;
+    background-color: #9a9d9a;
+    border-radius: 15px;
+    width: 90vh;
+    display: flex;
+    flex-direction: column;
+    jusitfy-content: center;
+    align-items: center;
+}
+
+#api-form {
+    border: 3px solid #f6f6f6;
+    background-color: orange;
+    border-radius: 15px;
+    width: 80vh;
+    display: flex;
+    flex-direction: column;
+    jusitfy-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+#api-form input {
+    padding: 10px;
+    margin: 10px;
+    border: 3px solid #f6f6f6;
+    background-color: #11792d;
+    border-radius: 15px;
+    color: #f6f6f6;
+    width: 80vh;
+    font-family: SauceCodePro, monospace;
 }
 
 #chat-container  {

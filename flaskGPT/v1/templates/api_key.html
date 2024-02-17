@@ -8,10 +8,22 @@
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400;700;800;900&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>flaskGPT login</h1>
-        <h3>Please enter a valid API key for OpenAI</h3>
-        <form action="/api_key" method="post">
-            <input type="text" name="api_key" />
-            <input type="submit" value="Submit" />
-        </form>
+        <div id="header">
+                <h1>flaskGPT login</h1>
+        </div>
+        <div id="api-container">
+            <div id="api">
+                <h3>Please enter a valid API key for OpenAI</h3>
+
+                <form action="/api_key" method="post" id="api-form">
+                    <div class="api-key">
+                        <input type="text" name="api_key" />
+                    </div>
+                    <div class="button">
+                        <button type="submit" value="Submit">Log me in!</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </body>
