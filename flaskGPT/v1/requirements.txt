@@ -1,6 +1,5 @@
 flask
 openai
-html
 markdown
 os
 re
