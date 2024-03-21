@@ -1,5 +1,3 @@
 flask
 openai
 markdown
-os
-re

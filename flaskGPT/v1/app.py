@@ -5,6 +5,7 @@ from openai import OpenAI
 from html import escape
 from collections import deque
 import markdown
+import time
 import os
 import re
 
@@ -102,7 +103,7 @@ def chat():
     stream_content = parse_md_with_ext(response)
 
 
-    messages.append({"role": "assistant", "content": html_content})
+    messages.append({"role": "assistant", "content": stream_content})
 
     # print(response)
     print("\n")
@@ -111,6 +112,50 @@ def chat():
     
 
     return render_template('chat.html', user_input=user_input, model_select=model_select, messages=messages, response=response)
+
+@app.route('/file', methods=['POST'])
+def fileChat():
+    api_key = session['api_key']
+
+    client = OpenAI(api_key=api_key)
+
+    file = client.files.create(
+            file=open('TOC.pdf', 'rb'),
+            purpose='assistants'
+            )
+
+    assistant = client.beta.assistants.create(
+            name="fileChat",
+            instructions="You are a personal document assistant.  You will answer all users questions from only the file or files provided to you.  If you are unable to find or infer an answer in the file or files provided, you should answer 'I don\'t know'",
+            model="gpt-4-turbo-preview",
+            tools=[{"type": "retrieval"}],
+            file_ids=[file.id],
+            )
+
+    thread = client.beta.threads.create()
+
+    message = client.beta.threads.messages.create(
+            thread_id='',
+            role="user",
+            content=user_input,
+            )
+
+    run = client.beta.threads.runs.create(
+            thread_id="",
+            assistant_id="",
+            )
+
+    run = client.beta.threads.runs.retrieve(
+            thread_id="",
+            run_id="",
+            )
+
+    thread_messages = client.beta.threads.messages.list("")
+    messages.append({"role": "user", "content": thread_messages.data[1].content})
+    
+
+    return render_template('file.html', user_input=user_input, messages=messages)
+
 
 
 if __name__ == '__main__':
